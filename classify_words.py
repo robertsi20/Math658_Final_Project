@@ -5,9 +5,10 @@ file: classify_words.py
 
 import spacy
 from nltk.tokenize import word_tokenize
+import pandas as pd
 
 #reads the file into memory
-with open("moby_dick.txt", "r") as f:
+with open("moby_dick_test.txt", "r") as f:
     file = f.read()
 
 #loads an english language model
@@ -61,7 +62,10 @@ doc = sp(tokens)
 
 #creates dictionary with word as the key and part of speech as the value
 #now that I think about it we may want to switch this into part of speech as key and word as value
-dictionary = {}
+data = {}
 for ent in doc:
-    dictionary[ent] = ent.pos_
-print(dictionary)
+    data[ent] = ent.pos_
+
+dictionary = {"word": list(data.keys()), "part_of_speech": list(data.values())}
+df = pd.DataFrame.from_dict(dictionary)
+#df.to_csv("moby_dick_test.csv")
