@@ -68,4 +68,10 @@ for ent in doc:
 
 dictionary = {"word": list(data.keys()), "part_of_speech": list(data.values())}
 df = pd.DataFrame.from_dict(dictionary)
+
+#you may need to switch the "9" in the sample method to get it to sample the number you want
+grouped_df = df.groupby("part_of_speech", group_keys=False).apply(lambda x: x.sample(min(len(x), 9)))
+
+
+#run this to generate a csv
 #df.to_csv("moby_dick_test.csv")
