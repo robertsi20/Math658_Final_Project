@@ -8,7 +8,7 @@ from nltk.tokenize import word_tokenize
 import pandas as pd
 
 #reads the file into memory
-with open("moby_dick_test.txt", "r") as f:
+with open("/Users/NathanBick/grad-school/Math658_Final_Project/moby_dick.txt", "r") as f:
     file = f.read()
 
 #loads an english language model
@@ -47,9 +47,23 @@ sp.Defaults.stop_words.add("-")
 sp.Defaults.stop_words.add("'")
 sp.Defaults.stop_words.add("as")
 sp.Defaults.stop_words.add("As")
+sp.Defaults.stop_words.add(":")
+
+
 
 #tokenizes by word the text file
-text_tokens = word_tokenize(file)
+text_tokens_tmp = word_tokenize(file.lower())
+
+#finding unique
+unique = []
+for word in text_tokens_tmp:
+    if word not in unique:
+        unique.append(word)
+
+#sort
+unique.sort()
+
+text_tokens = list(set(unique))
 
 #filters the stop words out
 tokens_without_sw= [word for word in text_tokens if not word in all_stopwords]
@@ -70,8 +84,9 @@ dictionary = {"word": list(data.keys()), "part_of_speech": list(data.values())}
 df = pd.DataFrame.from_dict(dictionary)
 
 #you may need to switch the "9" in the sample method to get it to sample the number you want
-grouped_df = df.groupby("part_of_speech", group_keys=False).apply(lambda x: x.sample(min(len(x), 9)))
+grouped_df = df.groupby("part_of_speech", group_keys=False).apply(lambda x: x.sample(min(len(x), 30)))
 
 
 #run this to generate a csv
-#df.to_csv("moby_dick_test.csv")
+df.to_csv("/Users/NathanBick/grad-school/Math658_Final_Project/moby_dick.csv")
+grouped_df.to_csv("/Users/NathanBick/grad-school/Math658_Final_Project/moby_dick_sample.csv")
